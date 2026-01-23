@@ -1,0 +1,147 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+typedefstruct treenode
+{
+int data;
+struct treenode *left;
+struct treenode *right;
+}tnode;
+tnode *insertion(int,tnode*);
+void preorder(tnode *);
+void inorder(tnode *);
+void postorder(tnode *);
+void main()
+{
+tnode *T=NULL;
+int ch1,n;
+char ch2;
+do
+{
+clrscr();
+printf("
+\n
+\t
+\t****Operation With Tree****");
+
+printf("
+\n
+\t1.Insertion");
+printf("
+\n
+\t2.Inorder Traversal");
+printf("
+\n
+\t3.Preorder Traversal");
+printf("
+\n
+\t4.Postorder Traversal");
+printf("
+\n
+\tEnter Your Choice :");
+scanf("%d",&ch1);
+switch(ch1) {
+case
+1
+:
+
+case 2:
+
+case 3:
+
+case 4:
+printf("
+\n
+\nenter the element to be inserted :");
+scanf("%d",&n);
+T=insertion(n,T);
+break;
+inorder(T);
+break;
+preorder(T);
+
+break;
+postorder(T);
+break;
+default:
+printf("
+\n
+\nInvalid Option");
+break;
+}
+printf("
+\n
+\nDo you want to continue y/n : ");
+scanf("%s",&ch2);
+}while(ch2=='y');
+getch(); }
+
+tnode *insertion(int x,tnode *T) {
+if(T==NULL) {
+T=(tnode *)malloc(sizeof(tnode));
+if(T==NULL)
+printf("
+\nout ofspace");
+
+else
+{
+T
+->data=x;
+T
+->left=T
+->right=NULL;
+}
+}
+else
+{
+if(x<(T
+->data)) T->left=insertion(x,T
+->left);
+
+else
+{
+if(x>T
+->data) T->right=insertion(x,T
+->right);
+}
+}
+return T;
+}
+void preorder(tnode *T) {
+if(T!=NULL) {
+printf("
+\t%d",T
+->data);
+
+preorder(T
+->left);
+preorder(T
+->right);
+
+}
+}
+void postorder(tnode *T) {
+if(T!=NULL) {
+postorder(T
+->left);
+postorder(T
+->right);
+
+printf("
+\t%d",T
+->data);
+
+}
+}
+void inorder(tnode *T) {
+if(T!=NULL) {
+inorder(T
+->left);
+printf("
+\t%d",T
+->data);
+
+inorder(T
+->right);
+}
+}

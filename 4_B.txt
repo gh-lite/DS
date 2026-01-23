@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <ctype.h>
+char stack[100];
+int top=0;
+char exp[100];
+struct table
+{
+char s[2];
+int isp;
+int icp;
+}pr[7];
+int isp(char c)
+{
+int i;
+for(i=0;i<=6;i++)
+if(pr[i].s[0]==c)
+return(pr[i].isp);
+return 0;
+}
+int icp(char c)
+{
+int i;
+for(i=0;i<=6;i++)
+if(pr[i].s[0]==c)
+return(pr[i].icp);
+return 0;
+}
+void main() {
+int i;
+clrscr();
+strcpy(pr[0].s,"^");
+pr[0].isp=3;
+pr[0].icp=4;
+strcpy(pr[1].s,"*");
+pr[1].isp=2; pr[1].icp=2;
+strcpy(pr[2].s,"/");
+pr[2].isp=2;
+pr[2].icp=2;
+strcpy(pr[3].s,"+");
+pr[3].isp=1;
+pr[3].icp=1;
+strcpy(pr[4].s,"
+-");
+pr[4].isp=1;
+pr[4].icp=1;
+strcpy(pr[5].s,"(");
+pr[5].isp=0;
+pr[5].icp=4;
+strcpy(pr[6].s,"=");
+pr[6].isp=
+-1;
+pr[6].icp=0;
+clrscr();
+stack[top]='=';
+printf("enter the infix expression");
+gets(exp);
+i=0;
+printf("the postfix expression is ")
+while(i<strlen(exp)) {
+if(isalpha(exp[i])==0)
+{
+if(exp[i]==')')
+{
+while(stack[top]!='(')
+{
+printf("%c",stack[top]);
+top--;
+}
+top--;
+
+}
+else
+{
+
+}
+}
+while(isp(stack[top])>=icp(exp[i]))
+{
+printf("%c",stack[top]);
+top--;
+}
+top++;
+stack[top]=exp[i];
+
+else
+printf("%c",exp[i]);
+i++;
+}
+while(top>0)
+{
+printf("%c",stack[top]);
+top--;
+}
+getch();
+}
