@@ -1,0 +1,181 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node {
+    int data, ht;
+    struct node *left, *right;
+} node;
+
+int height(node *t) {
+    if(t==NULL) return 0;
+    int lh = (t->left)? 1+t->left->ht : 0;
+    int rh = (t->right)? 1+t->right->ht: 0;
+    return (lh>rh)? lh:rh;
+}
+
+int BF(node *t) {
+    if(t==NULL) return 0;
+    int lh = (t->left)? 1+t->left->ht : 0;
+    int rh = (t->right)? 1+t->right->ht: 0;
+    return lh-rh;
+}
+
+node* rotateRight(node *x) {
+    node *y = x->left;
+    x->left = y->right;
+    y->right = x;
+    x->ht = height(x);
+    y->ht = height(y);
+    return y;
+}
+
+node* rotateLeft(node *x) {
+    node *y = x->right;
+    x->right = y->left;
+    y->left = x;
+    x->ht = height(x);
+    y->ht = height(y);
+    return y;
+}
+
+node* insert(node *t, int x) {
+    if(t==NULL) {
+        t = (node*)malloc(sizeof(node));
+        t->data = x;
+        t->left = t->right = NULL;
+    }
+    else if(x < t->data)
+        t->left = insert(t->left,x);
+    else if(x > t->data)
+        t->right = insert(t->right,x);
+
+    t->ht = height(t);
+
+    if(BF(t)==2) {
+        if(x < t->left->data)
+            return rotateRight(t);
+        else {
+            t->left = rotateLeft(t->left);
+            return rotateRight(t);
+        }
+    }
+
+    if(BF(t)==-2) {
+        if(x > t->right->data)
+            return rotateLeft(t);
+        else {
+            t->right = rotateRight(t->right);
+            return rotateLeft(t);
+        }
+    }
+
+    return t;
+}
+
+node* Delete(node *t, int x) {
+    if(t==NULL) return NULL;
+
+    if(x < t->data)
+        t->left = Delete(t->left,x);
+    else if(x > t->data)
+        t->right = Delete(t->right,x);
+    else {
+        if(t->left==NULL) return t->right;
+        if(t->right==NULL) return t->left;
+
+        node *p = t->right;
+        while(p->left) p = p->left;
+        t->data = p->data;
+        t->right = Delete(t->right,p->data);
+    }
+
+    t->ht = height(t);
+
+    if(BF(t)==2) {
+        if(BF(t->left)>=0)
+            return rotateRight(t);
+        else {
+            t->left = rotateLeft(t->left);
+            return rotateRight(t);
+        }
+    }
+
+    if(BF(t)==-2) {
+        if(BF(t->right)<=0)
+            return rotateLeft(t);
+        else {
+            t->right = rotateRight(t->right);
+            return rotateLeft(t);
+        }
+    }
+
+    return t;
+}
+
+void preorder(node *t) {
+    if(t) {
+        printf("%d(Bf=%d) ", t->data, BF(t));
+        preorder(t->left);
+        preorder(t->right);
+    }
+}
+
+void inorder(node *t) {
+    if(t) {
+        inorder(t->left);
+        printf("%d(Bf=%d) ", t->data, BF(t));
+        inorder(t->right);
+    }
+}
+
+int main() {
+    node *root=NULL;
+    int op,n,x,i;
+
+    do {
+        printf("\n1)Create:");
+        printf("\n2)Insert:");
+        printf("\n3)Delete:");
+        printf("\n4) Print:");
+        printf("\n5)Quit:");
+        printf("\nEnter Your Choice:");
+        scanf("%d",&op);
+
+        switch(op) {
+
+        case 1:
+            printf("Enter no. of elements:");
+            scanf("%d",&n);
+            root=NULL;
+            printf("Enter tree data:");
+            for(i=0;i<n;i++) {
+                scanf("%d",&x);
+                root = insert(root,x);
+            }
+            break;
+
+        case 2:
+            printf("Enter a data:");
+            scanf("%d",&x);
+            root = insert(root,x);
+            break;
+
+        case 3:
+            printf("Enter a data:");
+            scanf("%d",&x);
+            root = Delete(root,x);
+            break;
+
+        case 4:
+            printf("\nPreorder sequence:\n");
+            preorder(root);
+            printf("\nInorder sequence:\n");
+            inorder(root);
+            printf("\n");
+            break;
+        }
+
+    } while(op!=5);
+
+    return 0;
+}
