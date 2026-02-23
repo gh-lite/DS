@@ -1,4 +1,4 @@
-#include<iostream.h>
+
 #include<conio.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -29,17 +29,18 @@ int isEmpty(struct heapnode *h)
 
 void display(struct heapnode *h)
 {
+    int i;   // <-- FIX: declare variable here
+
     printf("\nPriority Queue Display:");
+
     if(isEmpty(h))
     {
         printf("\nPriority queue is empty");
         return;
     }
-    else
-    {
-        for(int i = 1; i <= h->size; i++)
-            printf(" %d", h->elements[i]);
-    }
+
+    for(i = 1; i <= h->size; i++)
+        printf(" %d", h->elements[i]);
 }
 
 struct heapnode* initialize()
@@ -134,7 +135,7 @@ int deleteMin(struct heapnode *h)
     return MinElement;
 }
 
-void main()
+int main()
 {
     int ch, ins, del;
     struct heapnode *h;
@@ -148,7 +149,7 @@ void main()
     while(1)
     {
         printf("\n1. Insert\n2. DeleteMin\n3. Display\n4. Exit");
-        printf("\nEnter ur choice:");
+        printf("\nEnter your choice:");
         scanf("%d",&ch);
 
         switch(ch)
@@ -174,4 +175,6 @@ void main()
                 exit(0);
         }
     }
+
+    return 0;
 }
